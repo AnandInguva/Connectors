@@ -6,6 +6,7 @@ import org.apache.kafka.connect.errors.ConnectException;
 import org.apache.kafka.connect.source.SourceRecord;
 import org.apache.kafka.connect.source.SourceTask;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -13,10 +14,7 @@ import java.util.Map;
 public class SampleSourceTask extends SourceTask {
     private Long failAfterMillis;
     // Num of tasks to run.
-    private int numTasks;
-    private long startTime;
-    private int currentTask = 0;
-    @Override
+    private long startTime;@Override
     public String version() {
         return null;
     }
@@ -24,7 +22,6 @@ public class SampleSourceTask extends SourceTask {
     @Override
     public void start(Map<String, String> map) {
         failAfterMillis = Long.parseLong(map.getOrDefault("taskFailSeconds", "5000"));
-        numTasks = Integer.parseInt(map.getOrDefault("numTasks", "5"));
         startTime = System.currentTimeMillis();
     }
 
@@ -36,17 +33,18 @@ public class SampleSourceTask extends SourceTask {
         }
 
         Thread.sleep(1000);
-
+        List<SourceRecord> sourceRecords = new ArrayList<>();
         SourceRecord sourceRecord = new SourceRecord(
                 Collections.singletonMap("source", "dummy"),
                 Collections.singletonMap("offset", elapsedTime),
                 "dummy-topic",
                 null, null, null,
                 Schema.STRING_SCHEMA,
-                "dummy_element"
+                "dummy_element", System.currentTimeMillis()
         );
 
-        return Collections.singletonList(sourceRecord);
+        sourceRecords.add(sourceRecord);
+        return sourceRecords;
     }
 
     @Override
