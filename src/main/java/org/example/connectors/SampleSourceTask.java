@@ -37,15 +37,13 @@ public class SampleSourceTask extends SourceTask {
 
         Thread.sleep(1000);
 
-        Schema valueSchema = SchemaBuilder.struct().field("task_id", Schema.INT32_SCHEMA).build();
-
         SourceRecord sourceRecord = new SourceRecord(
                 Collections.singletonMap("source", "dummy"),
                 Collections.singletonMap("offset", elapsedTime),
                 "dummy-topic",
                 null, null, null,
-                valueSchema,
-                Collections.singletonMap("task_id", elapsedTime)
+                Schema.STRING_SCHEMA,
+                "dummy_element"
         );
 
         return Collections.singletonList(sourceRecord);
