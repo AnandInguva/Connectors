@@ -53,7 +53,7 @@ public class SampleSourceConnector extends SourceConnector {
     }
 
     // IMPLEMENT A SOURCE TASK
-    private static class SampleSourceTask extends SourceTask {
+    public static class SampleSourceTask extends SourceTask {
         private Long failAfterMillis;
         // Num of tasks to run.
         private int numTasks;
