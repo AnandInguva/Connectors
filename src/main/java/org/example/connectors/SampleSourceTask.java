@@ -21,7 +21,7 @@ public class SampleSourceTask extends SourceTask {
     // Fail the task after these seconds;
     @Override
     public void start(Map<String, String> map) {
-        failAfterMillis = Long.parseLong(map.getOrDefault("taskFailSeconds", "5000"));
+        failAfterMillis = Long.parseLong(map.getOrDefault("failAfterMillis", "5000"));
         startTime = System.currentTimeMillis();
     }
 
