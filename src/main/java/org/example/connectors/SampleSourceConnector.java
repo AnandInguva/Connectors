@@ -48,6 +48,6 @@ public class SampleSourceConnector extends SourceConnector {
     @Override
     public ConfigDef config() {
         return new ConfigDef()
-                .define("failAfterMillis", ConfigDef.Type.LONG, 5000, ConfigDef.Importance.HIGH, "Time after which to fail a task (ms)");
+                .define("failAfterSeconds", ConfigDef.Type.LONG, 30, ConfigDef.Importance.HIGH, "Time after which to fail a task (seconds)");
     }
 }

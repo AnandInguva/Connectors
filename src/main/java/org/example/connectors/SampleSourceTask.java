@@ -2,17 +2,15 @@ package org.example.connectors;
 
 import org.apache.kafka.connect.data.Schema;
 import org.apache.kafka.connect.data.SchemaBuilder;
+import org.apache.kafka.connect.data.Timestamp;
 import org.apache.kafka.connect.errors.ConnectException;
 import org.apache.kafka.connect.source.SourceRecord;
 import org.apache.kafka.connect.source.SourceTask;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SampleSourceTask extends SourceTask {
-    private Long failAfterMillis;
+    private Long failAfterSeconds;
     // Num of tasks to run.
     private long startTime;@Override
     public String version() {
@@ -21,26 +19,28 @@ public class SampleSourceTask extends SourceTask {
     // Fail the task after these seconds;
     @Override
     public void start(Map<String, String> map) {
-        failAfterMillis = Long.parseLong(map.getOrDefault("failAfterMillis", "5000"));
+        failAfterSeconds = Long.parseLong(map.getOrDefault("failAfterSeconds", "30"));
         startTime = System.currentTimeMillis();
     }
 
     @Override
     public List<SourceRecord> poll() throws InterruptedException {
         long elapsedTime = System.currentTimeMillis() - startTime;
-        if (elapsedTime >= failAfterMillis) {
-            throw new ConnectException("Task failed after " + failAfterMillis + " milliseconds");
+        if (elapsedTime >= failAfterSeconds * 1000) // elapsedTime is in millis
+        {
+            throw new ConnectException("Task failed after " + failAfterSeconds + " seconds");
         }
 
         Thread.sleep(1000);
         List<SourceRecord> sourceRecords = new ArrayList<>();
+        long time = System.currentTimeMillis();
         SourceRecord sourceRecord = new SourceRecord(
                 Collections.singletonMap("source", "dummy"),
                 Collections.singletonMap("offset", elapsedTime),
                 "dummy-topic",
                 null, null, null,
                 Schema.STRING_SCHEMA,
-                "dummy_element", System.currentTimeMillis()
+                String.format("Element at time: %s", time), System.currentTimeMillis()
         );
 
         sourceRecords.add(sourceRecord);
