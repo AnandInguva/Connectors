@@ -35,7 +35,8 @@ public class SampleSourceConnector extends SourceConnector {
         List<Map<String, String>> taskConfigs = new ArrayList<>();
         for (int i = 0; i < maxTasks;
              i++) {
-            if (i == 1) {
+            // Fail the even numbered tasks.
+            if (i % 2 == 0) {
                 configProperties.put("failTask", "true");
             }
             taskConfigs.add(new HashMap<>(configProperties));
