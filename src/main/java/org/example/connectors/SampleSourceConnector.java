@@ -33,11 +33,12 @@ public class SampleSourceConnector extends SourceConnector {
     @Override
     public List<Map<String, String>> taskConfigs(int maxTasks) {
         List<Map<String, String>> taskConfigs = new ArrayList<>();
-        for (int i = 0; i < maxTasks;
-             i++) {
+        for (int i = 0; i < maxTasks; i++) {
             // Fail the even numbered tasks.
             if (i % 2 == 0) {
                 configProperties.put("failTask", "true");
+            } else {
+                configProperties.remove("failTask");
             }
             taskConfigs.add(new HashMap<>(configProperties));
 
